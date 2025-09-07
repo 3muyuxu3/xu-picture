@@ -57,14 +57,24 @@ const originItems = [
     title: '主页',
   },
   {
+    key: '/add_picture',
+    label: '创建图片',
+    title: '创建图片',
+  },
+  {
     key: '/admin/userManage',
     label: '用户管理',
     title: '用户管理',
   },
   {
+    key: '/admin/pictureManage',
+    label: '图片管理',
+    title: '图片管理',
+  },
+  {
     key: 'others',
-    label: h('a', { href: 'https://gitee.com/czxspaces', target: '_blank' }, '编程导航'),
-    title: '编程导航',
+    label: h('a', { href: 'https://gitee.com/czxspaces', target: '_blank' }, '作者主页'),
+    title: '作者主页',
   },
 ]
 
