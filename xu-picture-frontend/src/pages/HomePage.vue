@@ -1,6 +1,5 @@
 <template>
   <div id="homePage">
-    <h1>{{ msg }}</h1>
     <!-- 搜索框 -->
     <div class="search-bar">
       <a-input-search
@@ -67,7 +66,6 @@
 </template>
 
 <script setup lang="ts">
-const msg = "欢迎来到木羽智能协同云图库，你将进入图片的世界~";
 import { computed, onMounted, reactive, ref } from 'vue'
 import {
   listPictureTagCategoryUsingGet,
