@@ -241,6 +241,7 @@ declare namespace API {
     picWidth?: number
     reviewMessage?: string
     reviewStatus?: number
+    reviewTime?: string
     reviewerId?: number
     searchText?: string
     sortField?: string
