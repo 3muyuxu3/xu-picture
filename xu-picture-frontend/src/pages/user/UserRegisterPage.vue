@@ -1,14 +1,8 @@
 <template>
   <div id="userRegisterPage">
     <h2 class="title">木羽云图库 - 用户注册</h2>
-    <div class="desc">木羽智能协同云图库平台</div>
-    <a-form
-      :model="formState"
-      name="basic"
-      label-align="left"
-      autocomplete="off"
-      @finish="handleSubmit"
-    >
+    <div class="desc">智能协同云图库平台</div>
+    <a-form :model="formState" name="basic" autocomplete="off" @finish="handleSubmit">
       <a-form-item name="userAccount" :rules="[{ required: true, message: '请输入账号' }]">
         <a-input v-model:value="formState.userAccount" placeholder="请输入账号" />
       </a-form-item>
@@ -16,7 +10,7 @@
         name="userPassword"
         :rules="[
           { required: true, message: '请输入密码' },
-          { min: 8, message: '密码不能小于 8 位' },
+          { min: 8, message: '密码长度不能小于 8 位' },
         ]"
       >
         <a-input-password v-model:value="formState.userPassword" placeholder="请输入密码" />
@@ -25,7 +19,7 @@
         name="checkPassword"
         :rules="[
           { required: true, message: '请输入确认密码' },
-          { min: 8, message: '确认密码不能小于 8 位' },
+          { min: 8, message: '确认密码长度不能小于 8 位' },
         ]"
       >
         <a-input-password v-model:value="formState.checkPassword" placeholder="请输入确认密码" />
@@ -40,7 +34,6 @@
     </a-form>
   </div>
 </template>
-
 <script lang="ts" setup>
 import { reactive } from 'vue'
 import { userRegisterUsingPost } from '@/api/userController.ts'

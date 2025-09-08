@@ -1,6 +1,3 @@
-/**
- * 图片审核状态枚举
- */
 export const PIC_REVIEW_STATUS_ENUM = {
   REVIEWING: 0,
   PASS: 1,

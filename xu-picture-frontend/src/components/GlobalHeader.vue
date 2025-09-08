@@ -2,26 +2,38 @@
   <div id="globalHeader">
     <a-row :wrap="false">
       <a-col flex="200px">
-        <RouterLink to="/">
+        <router-link to="/">
           <div class="title-bar">
             <img class="logo" src="../assets/logo.png" alt="logo" />
             <div class="title">木羽云图库</div>
           </div>
-        </RouterLink>
+        </router-link>
       </a-col>
       <a-col flex="auto">
-        <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" @click="doMenuClick" />
+        <a-menu
+          v-model:selectedKeys="current"
+          mode="horizontal"
+          :items="items"
+          @click="doMenuClick"
+        />
       </a-col>
+      <!-- 用户信息展示栏 -->
       <a-col flex="120px">
         <div class="user-login-status">
           <div v-if="loginUserStore.loginUser.id">
             <a-dropdown>
-              <ASpace>
+              <a-space>
                 <a-avatar :src="loginUserStore.loginUser.userAvatar" />
                 {{ loginUserStore.loginUser.userName ?? '无名' }}
-              </ASpace>
+              </a-space>
               <template #overlay>
                 <a-menu>
+                  <a-menu-item>
+                    <router-link to="/my_space">
+                      <UserOutlined />
+                      我的空间
+                    </router-link>
+                  </a-menu-item>
                   <a-menu-item @click="doLogout">
                     <LogoutOutlined />
                     退出登录
@@ -40,15 +52,15 @@
 </template>
 <script lang="ts" setup>
 import { computed, h, ref } from 'vue'
-import { HomeOutlined } from '@ant-design/icons-vue'
+import { HomeOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons-vue'
 import { MenuProps, message } from 'ant-design-vue'
-import { useRouter } from "vue-router";
-import { useLoginUserStore } from "@/stores/useLoginUserStore.ts";
+import { useRouter } from 'vue-router'
+import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 import { userLogoutUsingPost } from '@/api/userController.ts'
 
 const loginUserStore = useLoginUserStore()
 
-// 菜单列表
+// 未经过滤的菜单项
 const originItems = [
   {
     key: '/',
@@ -72,18 +84,24 @@ const originItems = [
     title: '图片管理',
   },
   {
+    key: '/admin/spaceManage',
+    label: '空间管理',
+    title: '空间管理',
+  },
+  {
     key: 'others',
-    label: h('a', { href: 'https://gitee.com/czxspaces', target: '_blank' }, '作者主页'),
-    title: '作者主页',
+    label: h('a', { href: 'https://gitee.com/czxspaces', target: '_blank' }, '个人主页'),
+    title: '个人主页',
   },
 ]
 
-// 过滤菜单项
+// 根据权限过滤菜单项
 const filterMenus = (menus = [] as MenuProps['items']) => {
   return menus?.filter((menu) => {
-    if (menu.key.startsWith('/admin')) {
+    // 管理员才能看到 /admin 开头的菜单
+    if (menu?.key?.startsWith('/admin')) {
       const loginUser = loginUserStore.loginUser
-      if (!loginUser || loginUser.userRole !== "admin") {
+      if (!loginUser || loginUser.userRole !== 'admin') {
         return false
       }
     }
@@ -92,27 +110,26 @@ const filterMenus = (menus = [] as MenuProps['items']) => {
 }
 
 // 展示在菜单的路由数组
-const items = computed<MenuProps['items']>(() => filterMenus(originItems))
+const items = computed(() => filterMenus(originItems))
 
-const router = useRouter();
-// 当前选中菜单
-const current = ref<string[]>([]);
-// 监听路由变化，更新当前选中菜单
+const router = useRouter()
+// 当前要高亮的菜单项
+const current = ref<string[]>([])
+// 监听路由变化，更新高亮菜单项
 router.afterEach((to, from, next) => {
-  current.value = [to.path];
-});
+  current.value = [to.path]
+})
 
 // 路由跳转事件
-const doMenuClick = ({ key }: { key: string }) => {
+const doMenuClick = ({ key }) => {
   router.push({
     path: key,
-  });
-};
+  })
+}
 
 // 用户注销
 const doLogout = async () => {
   const res = await userLogoutUsingPost()
-  console.log(res)
   if (res.data.code === 0) {
     loginUserStore.setLoginUser({
       userName: '未登录',
@@ -126,7 +143,7 @@ const doLogout = async () => {
 </script>
 
 <style scoped>
-.title-bar {
+#globalHeader .title-bar {
   display: flex;
   align-items: center;
 }

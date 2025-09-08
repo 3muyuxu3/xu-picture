@@ -1,7 +1,7 @@
 <template>
   <div id="userLoginPage">
     <h2 class="title">木羽云图库 - 用户登录</h2>
-    <div class="desc">木羽智能协同云图库平台</div>
+    <div class="desc">智能协同云图库平台</div>
     <a-form :model="formState" name="basic" autocomplete="off" @finish="handleSubmit">
       <a-form-item name="userAccount" :rules="[{ required: true, message: '请输入账号' }]">
         <a-input v-model:value="formState.userAccount" placeholder="请输入账号" />
@@ -10,7 +10,7 @@
         name="userPassword"
         :rules="[
           { required: true, message: '请输入密码' },
-          { min: 8, message: '密码不能小于 8 位' },
+          { min: 8, message: '密码长度不能小于 8 位' },
         ]"
       >
         <a-input-password v-model:value="formState.userPassword" placeholder="请输入密码" />
@@ -25,7 +25,6 @@
     </a-form>
   </div>
 </template>
-
 <script lang="ts" setup>
 import { reactive } from 'vue'
 import { userLoginUsingPost } from '@/api/userController.ts'
@@ -79,9 +78,9 @@ const handleSubmit = async (values: any) => {
 }
 
 .tips {
-  margin-bottom: 16px;
   color: #bbb;
-  font-size: 13px;
   text-align: right;
+  font-size: 13px;
+  margin-bottom: 16px;
 }
 </style>
