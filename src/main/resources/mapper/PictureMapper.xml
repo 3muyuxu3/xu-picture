@@ -31,9 +31,11 @@
 
     <sql id="Base_Column_List">
         id,url,thumbnailUrl,name,
-    introduction,category,tags,
-    picSize,picWidth,picHeight,
-    picScale,picFormat,userId,spaceId,
-    createTime,editTime,updateTime,isDelete
+        introduction,category,tags,
+        picSize,picWidth,picHeight,
+        picScale,picFormat,userId,spaceId,
+        createTime,editTime,updateTime,
+        isDelete,reviewStatus,reviewMessage,
+        reviewerId,reviewTime
     </sql>
 </mapper>

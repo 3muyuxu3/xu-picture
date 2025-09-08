@@ -85,7 +85,7 @@ public class Picture implements Serializable {
     private Long spaceId;
 
     /**
-     * 状态：0-待审核; 1-通过; 2-拒绝
+     * 审核状态：0-待审核; 1-通过; 2-拒绝
      */
     private Integer reviewStatus;
 
@@ -95,7 +95,7 @@ public class Picture implements Serializable {
     private String reviewMessage;
 
     /**
-     * 审核人 id
+     * 审核人 ID
      */
     private Long reviewerId;
 

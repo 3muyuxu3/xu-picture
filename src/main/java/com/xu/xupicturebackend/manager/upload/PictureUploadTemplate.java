@@ -31,10 +31,10 @@ import java.util.List;
 public abstract class PictureUploadTemplate {
 
     @Resource
-    protected CosManager cosManager;
+    private CosClientConfig cosClientConfig;
 
     @Resource
-    protected CosClientConfig cosClientConfig;
+    private CosManager cosManager;
 
     /**
      * 模板方法，定义上传流程
@@ -72,7 +72,7 @@ public abstract class PictureUploadTemplate {
                     thumbnailCiObject = objectList.get(1);
                 }
                 // 封装压缩图的返回结果
-                return buildResult(originalFilename, compressedCiObject, thumbnailCiObject, imageInfo);
+                return buildResult(originalFilename, compressedCiObject, thumbnailCiObject);
             }
             return buildResult(originalFilename, file, uploadPath, imageInfo);
         } catch (Exception e) {
@@ -82,6 +82,7 @@ public abstract class PictureUploadTemplate {
             // 6. 临时文件清理
             this.deleteTempFile(file);
         }
+
     }
 
     /**
@@ -101,9 +102,13 @@ public abstract class PictureUploadTemplate {
 
     /**
      * 封装返回结果
+     *
+     * @param originalFilename   原始文件名
+     * @param compressedCiObject 压缩后的对象
+     * @param thumbnailCiObject  缩略图对象
+     * @return
      */
-    private UploadPictureResult buildResult(String originalFilename, CIObject compressedCiObject, CIObject thumbnailCiObject,
-                                            ImageInfo imageInfo) {
+    private UploadPictureResult buildResult(String originalFilename, CIObject compressedCiObject, CIObject thumbnailCiObject) {
         // 计算宽高
         int picWidth = compressedCiObject.getWidth();
         int picHeight = compressedCiObject.getHeight();
@@ -126,29 +131,41 @@ public abstract class PictureUploadTemplate {
 
     /**
      * 封装返回结果
+     *
+     * @param originalFilename
+     * @param file
+     * @param uploadPath
+     * @param imageInfo        对象存储返回的图片信息
+     * @return
      */
-    private UploadPictureResult buildResult(String originFilename, File file, String uploadPath, ImageInfo imageInfo) {
-        UploadPictureResult uploadPictureResult = new UploadPictureResult();
+    private UploadPictureResult buildResult(String originalFilename, File file, String uploadPath, ImageInfo imageInfo) {
+        // 计算宽高
         int picWidth = imageInfo.getWidth();
         int picHeight = imageInfo.getHeight();
         double picScale = NumberUtil.round(picWidth * 1.0 / picHeight, 2).doubleValue();
-        uploadPictureResult.setPicName(FileUtil.mainName(originFilename));
+        // 封装返回结果
+        UploadPictureResult uploadPictureResult = new UploadPictureResult();
+        uploadPictureResult.setUrl(cosClientConfig.getHost() + "/" + uploadPath);
+        uploadPictureResult.setPicName(FileUtil.mainName(originalFilename));
+        uploadPictureResult.setPicSize(FileUtil.size(file));
         uploadPictureResult.setPicWidth(picWidth);
         uploadPictureResult.setPicHeight(picHeight);
         uploadPictureResult.setPicScale(picScale);
         uploadPictureResult.setPicFormat(imageInfo.getFormat());
-        uploadPictureResult.setPicSize(FileUtil.size(file));
-        uploadPictureResult.setUrl(cosClientConfig.getHost() + "/" + uploadPath);
+        // 返回可访问的地址
         return uploadPictureResult;
     }
 
     /**
-     * 删除临时文件
+     * 清理临时文件
+     *
+     * @param file
      */
     public void deleteTempFile(File file) {
         if (file == null) {
             return;
         }
+        // 删除临时文件
         boolean deleteResult = file.delete();
         if (!deleteResult) {
             log.error("file delete error, filepath = {}", file.getAbsolutePath());
