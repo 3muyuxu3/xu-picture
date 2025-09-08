@@ -203,7 +203,6 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             }
             return picture;
         });
-        // 可自行实现，如果是更新，可以清理图片资源
         // this.clearPictureFile(oldPicture);
         return PictureVO.objToVo(picture);
     }
@@ -237,9 +236,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
                 .map(PictureVO::objToVo)
                 .collect(Collectors.toList());
         // 1. 关联查询用户信息
-        // 1,2,3,4
         Set<Long> userIdSet = pictureList.stream().map(Picture::getUserId).collect(Collectors.toSet());
-        // 1 => user1, 2 => user2
         Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
         // 2. 填充信息
@@ -278,13 +275,14 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         String reviewMessage = pictureQueryRequest.getReviewMessage();
         Long reviewerId = pictureQueryRequest.getReviewerId();
         Long spaceId = pictureQueryRequest.getSpaceId();
+        Date startEditTime = pictureQueryRequest.getStartEditTime();
+        Date endEditTime = pictureQueryRequest.getEndEditTime();
         boolean nullSpaceId = pictureQueryRequest.isNullSpaceId();
         String sortField = pictureQueryRequest.getSortField();
         String sortOrder = pictureQueryRequest.getSortOrder();
         // 从多字段中搜索
         if (StrUtil.isNotBlank(searchText)) {
             // 需要拼接查询条件
-            // and (name like "%xxx%" or introduction like "%xxx%")
             queryWrapper.and(
                     qw -> qw.like("name", searchText)
                             .or()
@@ -303,6 +301,8 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         queryWrapper.eq(ObjUtil.isNotEmpty(picWidth), "picWidth", picWidth);
         queryWrapper.eq(ObjUtil.isNotEmpty(picHeight), "picHeight", picHeight);
         queryWrapper.eq(ObjUtil.isNotEmpty(picSize), "picSize", picSize);
+        queryWrapper.ge(ObjUtil.isNotEmpty(startEditTime), "editTime", startEditTime);
+        queryWrapper.lt(ObjUtil.isNotEmpty(endEditTime), "editTime", endEditTime);
         queryWrapper.eq(ObjUtil.isNotEmpty(picScale), "picScale", picScale);
         queryWrapper.eq(ObjUtil.isNotEmpty(reviewStatus), "reviewStatus", reviewStatus);
         queryWrapper.eq(ObjUtil.isNotEmpty(reviewerId), "reviewerId", reviewerId);
