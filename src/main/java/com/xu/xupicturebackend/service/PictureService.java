@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 public interface PictureService extends IService<Picture> {
 
     /**
-     * 数据校验
+     * 校验图片
      *
      * @param picture
      */
@@ -38,7 +38,7 @@ public interface PictureService extends IService<Picture> {
                             User loginUser);
 
     /**
-     * 获取图片视图
+     * 获取图片包装类（单条）
      *
      * @param picture
      * @param request
@@ -47,7 +47,7 @@ public interface PictureService extends IService<Picture> {
     PictureVO getPictureVO(Picture picture, HttpServletRequest request);
 
     /**
-     * 获取图片视图分页
+     * 获取图片包装类（分页）
      *
      * @param picturePage
      * @param request
@@ -56,12 +56,13 @@ public interface PictureService extends IService<Picture> {
     Page<PictureVO> getPictureVOPage(Page<Picture> picturePage, HttpServletRequest request);
 
     /**
-     * 构造图片查询条件
+     * 获取查询对象
      *
      * @param pictureQueryRequest
      * @return
      */
     QueryWrapper<Picture> getQueryWrapper(PictureQueryRequest pictureQueryRequest);
+
 
     /**
      * 图片审核
@@ -72,7 +73,7 @@ public interface PictureService extends IService<Picture> {
     void doPictureReview(PictureReviewRequest pictureReviewRequest, User loginUser);
 
     /**
-     * 填充审核相关参数
+     * 填充审核参数
      *
      * @param picture
      * @param loginUser
@@ -86,10 +87,8 @@ public interface PictureService extends IService<Picture> {
      * @param loginUser
      * @return 成功创建的图片数
      */
-    Integer uploadPictureByBatch(
-            PictureUploadByBatchRequest pictureUploadByBatchRequest,
-            User loginUser
-    );
+    Integer uploadPictureByBatch(PictureUploadByBatchRequest pictureUploadByBatchRequest,
+                                 User loginUser);
 
     /**
      * 清理图片文件
@@ -101,24 +100,24 @@ public interface PictureService extends IService<Picture> {
     /**
      * 删除图片
      *
-     * @param pictureId 图片 id
-     * @param loginUser 当前登录用户
+     * @param pictureId
+     * @param loginUser
      */
     void deletePicture(long pictureId, User loginUser);
 
     /**
      * 编辑图片
      *
-     * @param pictureEditRequest 图片编辑请求
-     * @param loginUser 当前登录用户
+     * @param pictureEditRequest
+     * @param loginUser
      */
     void editPicture(PictureEditRequest pictureEditRequest, User loginUser);
 
     /**
-     * 检查用户对空间的操作权限
+     * 校验空间图片的权限
      *
-     * @param loginUser 当前登录用户
-     * @param picture 空间
+     * @param loginUser
+     * @param picture
      */
     void checkPictureAuth(User loginUser, Picture picture);
 }

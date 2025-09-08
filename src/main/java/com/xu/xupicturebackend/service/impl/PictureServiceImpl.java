@@ -203,6 +203,8 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             }
             return picture;
         });
+        // 可自行实现，如果是更新，可以清理图片资源
+        // this.clearPictureFile(oldPicture);
         return PictureVO.objToVo(picture);
     }
 
@@ -306,6 +308,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         queryWrapper.eq(ObjUtil.isNotEmpty(reviewerId), "reviewerId", reviewerId);
         // JSON 数组查询
         if (CollUtil.isNotEmpty(tags)) {
+            /* and (tag like "%\"Java\"%" and like "%\"Python\"%") */
             for (String tag : tags) {
                 queryWrapper.like("tags", "\"" + tag + "\"");
             }

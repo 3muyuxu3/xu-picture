@@ -22,8 +22,8 @@ public interface SpaceService extends IService<Space> {
     /**
      * 创建空间
      *
-     * @param spaceAddRequest 空间创建请求
-     * @param loginUser 当前登录用户
+     * @param spaceAddRequest
+     * @param loginUser
      * @return
      */
     long addSpace(SpaceAddRequest spaceAddRequest, User loginUser);
@@ -31,7 +31,7 @@ public interface SpaceService extends IService<Space> {
     /**
      * 校验空间
      *
-     * @param space 空间
+     * @param space
      * @param add   是否为创建时检验
      */
     void validSpace(Space space, boolean add);
@@ -39,7 +39,7 @@ public interface SpaceService extends IService<Space> {
     /**
      * 获取空间包装类（单条）
      *
-     * @param space 空间
+     * @param space
      * @param request
      * @return
      */
@@ -48,7 +48,7 @@ public interface SpaceService extends IService<Space> {
     /**
      * 获取空间包装类（分页）
      *
-     * @param spacePage  空间分页
+     * @param spacePage
      * @param request
      * @return
      */
@@ -65,7 +65,7 @@ public interface SpaceService extends IService<Space> {
     /**
      * 根据空间级别填充空间对象
      *
-     * @param space  空间
+     * @param space
      */
     void fillSpaceBySpaceLevel(Space space);
 }

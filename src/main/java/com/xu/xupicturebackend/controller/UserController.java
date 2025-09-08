@@ -1,5 +1,6 @@
 package com.xu.xupicturebackend.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xu.xupicturebackend.annotation.AuthCheck;
 import com.xu.xupicturebackend.common.BaseResponse;
@@ -35,9 +36,6 @@ public class UserController {
 
     /**
      * 用户注册
-     *
-     * @param userRegisterRequest 用户注册请求体
-     * @return 新用户 id
      */
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
@@ -51,10 +49,6 @@ public class UserController {
 
     /**
      * 用户登录
-     *
-     * @param userLoginRequest
-     * @param request
-     * @return
      */
     @PostMapping("/login")
     public BaseResponse<LoginUserVO> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
@@ -67,9 +61,6 @@ public class UserController {
 
     /**
      * 获取当前登录用户
-     *
-     * @param request
-     * @return 当前登录用户
      */
     @GetMapping("/get/login")
     public BaseResponse<LoginUserVO> getLoginUser(HttpServletRequest request) {
@@ -79,9 +70,6 @@ public class UserController {
 
     /**
      * 用户注销
-     *
-     * @param request
-     * @return
      */
     @PostMapping("/logout")
     public BaseResponse<Boolean> userLogout(HttpServletRequest request) {
@@ -98,11 +86,12 @@ public class UserController {
     public BaseResponse<Long> addUser(@RequestBody UserAddRequest userAddRequest) {
         ThrowUtils.throwIf(userAddRequest == null, ErrorCode.PARAMS_ERROR);
         User user = new User();
-        BeanUtils.copyProperties(userAddRequest, user);
-        // 默认密码 12345678
+        BeanUtil.copyProperties(userAddRequest, user);
+        // 默认密码
         final String DEFAULT_PASSWORD = "12345678";
         String encryptPassword = userService.getEncryptPassword(DEFAULT_PASSWORD);
         user.setUserPassword(encryptPassword);
+        // 插入数据库
         boolean result = userService.save(user);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(user.getId());
@@ -162,8 +151,7 @@ public class UserController {
     /**
      * 分页获取用户封装列表（仅管理员）
      *
-     * @param userQueryRequest
-     * @return
+     * @param userQueryRequest 查询请求参数
      */
     @PostMapping("/list/page/vo")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
