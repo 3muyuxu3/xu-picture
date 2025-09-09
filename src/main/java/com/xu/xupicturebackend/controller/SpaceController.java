@@ -9,6 +9,7 @@ import com.xu.xupicturebackend.constant.UserConstant;
 import com.xu.xupicturebackend.exception.BusinessException;
 import com.xu.xupicturebackend.exception.ErrorCode;
 import com.xu.xupicturebackend.exception.ThrowUtils;
+import com.xu.xupicturebackend.manager.auth.SpaceUserAuthManager;
 import com.xu.xupicturebackend.model.dto.space.*;
 import com.xu.xupicturebackend.model.entity.Space;
 import com.xu.xupicturebackend.model.entity.User;
@@ -42,6 +43,9 @@ public class SpaceController {
 
     @Resource
     private SpaceService spaceService;
+
+    @Resource
+    private SpaceUserAuthManager spaceUserAuthManager;
 
     @PostMapping("/add")
     public BaseResponse<Long> addSpace(@RequestBody SpaceAddRequest spaceAddRequest, HttpServletRequest request) {
@@ -124,8 +128,12 @@ public class SpaceController {
         // 查询数据库
         Space space = spaceService.getById(id);
         ThrowUtils.throwIf(space == null, ErrorCode.NOT_FOUND_ERROR);
+        SpaceVO spaceVO = spaceService.getSpaceVO(space, request);
+        User loginUser = userService.getLoginUser(request);
+        List<String> permissionList = spaceUserAuthManager.getPermissionList(space, loginUser);
+        spaceVO.setPermissionList(permissionList);
         // 获取封装类
-        return ResultUtils.success(spaceService.getSpaceVO(space, request));
+        return ResultUtils.success(spaceVO);
     }
 
     /**
