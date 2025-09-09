@@ -7,6 +7,7 @@ import com.xu.xupicturebackend.model.entity.Picture;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xu.xupicturebackend.model.entity.User;
 import com.xu.xupicturebackend.model.vo.PictureVO;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -118,7 +119,7 @@ public interface PictureService extends IService<Picture> {
      * 校验空间图片的权限
      *
      * @param loginUser
-     * @param picture 
+     * @param picture
      */
     void checkPictureAuth(User loginUser, Picture picture);
 
@@ -131,4 +132,13 @@ public interface PictureService extends IService<Picture> {
      * @return
      */
     List<PictureVO> searchPictureByColor(Long spaceId, String picColor, User loginUser);
+
+    /**
+     * 批量编辑图片
+     *
+     * @param pictureEditByBatchRequest
+     * @param loginUser
+     */
+    @Transactional(rollbackFor = Exception.class)
+    void editPictureByBatch(PictureEditByBatchRequest pictureEditByBatchRequest, User loginUser);
 }
