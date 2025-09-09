@@ -90,7 +90,7 @@ const originItems = [
   },
   {
     key: 'others',
-    label: h('a', { href: 'https://gitee.com/czxspaces', target: '_blank' }, '个人主页'),
+    label: h('a', { href: 'https://github.com/Gosling-bit/Gosling-bit', target: '_blank' }, '个人主页'),
     title: '个人主页',
   },
 ]

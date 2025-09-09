@@ -11,7 +11,7 @@
         </a-layout-content>
       </a-layout>
       <a-layout-footer class="footer">
-        <a href="https://gitee.com/czxspaces" target="_blank"> 智能协同云图库 by 程序员栩 </a>
+        <a href="https://github.com/Gosling-bit/Gosling-bit" target="_blank"> 智能协同云图库 by程序员栩 </a>
       </a-layout-footer>
     </a-layout>
   </div>
