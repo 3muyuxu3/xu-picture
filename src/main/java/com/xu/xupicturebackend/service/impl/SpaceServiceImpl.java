@@ -148,9 +148,7 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
                 .map(SpaceVO::objToVo)
                 .collect(Collectors.toList());
         // 1. 关联查询用户信息
-        // 1,2,3,4
         Set<Long> userIdSet = spaceList.stream().map(Space::getUserId).collect(Collectors.toSet());
-        // 1 => user1, 2 => user2
         Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
         // 2. 填充信息
