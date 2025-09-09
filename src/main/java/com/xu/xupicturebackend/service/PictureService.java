@@ -10,6 +10,7 @@ import com.xu.xupicturebackend.model.vo.PictureVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
 * @author 22746
@@ -117,7 +118,17 @@ public interface PictureService extends IService<Picture> {
      * 校验空间图片的权限
      *
      * @param loginUser
-     * @param picture
+     * @param picture 
      */
     void checkPictureAuth(User loginUser, Picture picture);
+
+    /**
+     * 根据主色调搜索图片
+     *
+     * @param spaceId
+     * @param picColor
+     * @param loginUser
+     * @return
+     */
+    List<PictureVO> searchPictureByColor(Long spaceId, String picColor, User loginUser);
 }
