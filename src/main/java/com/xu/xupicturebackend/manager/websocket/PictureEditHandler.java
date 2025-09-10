@@ -86,9 +86,7 @@ public class PictureEditHandler extends TextWebSocketHandler {
     /**
      * 进入编辑状态
      */
-    public void handleEnterEditMessage(PictureEditRequestMessage pictureEditRequestMessage,
-                                       WebSocketSession session,
-                                       User user, Long pictureId) throws IOException {
+    public void handleEnterEditMessage(PictureEditRequestMessage pictureEditRequestMessage, WebSocketSession session, User user, Long pictureId) throws IOException {
         // 没有用户正在编辑该图片，才能进入编辑
         if (!pictureEditingUsers.containsKey(pictureId)) {
             // 设置用户正在编辑该图片
@@ -107,9 +105,7 @@ public class PictureEditHandler extends TextWebSocketHandler {
     /**
      * 处理编辑操作
      */
-    public void handleEditActionMessage(PictureEditRequestMessage pictureEditRequestMessage,
-                                        WebSocketSession session,
-                                        User user, Long pictureId) throws IOException {
+    public void handleEditActionMessage(PictureEditRequestMessage pictureEditRequestMessage, WebSocketSession session, User user, Long pictureId) throws IOException {
         // 正在编辑的用户
         Long editingUserId = pictureEditingUsers.get(pictureId);
         String editAction = pictureEditRequestMessage.getEditAction();
@@ -136,9 +132,7 @@ public class PictureEditHandler extends TextWebSocketHandler {
     /**
      * 退出编辑状态
      */
-    public void handleExitEditMessage(PictureEditRequestMessage pictureEditRequestMessage,
-                                      WebSocketSession session,
-                                      User user, Long pictureId) throws IOException {
+    public void handleExitEditMessage(PictureEditRequestMessage pictureEditRequestMessage, WebSocketSession session, User user, Long pictureId) throws IOException {
         // 正在编辑的用户
         Long editingUserId = pictureEditingUsers.get(pictureId);
         // 确认是当前的编辑者
@@ -159,8 +153,7 @@ public class PictureEditHandler extends TextWebSocketHandler {
      * 关闭连接
      */
     @Override
-    public void afterConnectionClosed(WebSocketSession session,
-                                      CloseStatus status) throws Exception {
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         super.afterConnectionClosed(session, status);
         // 从 Session 属性中获取到公共参数
         User user = (User) session.getAttributes().get("user");
@@ -187,9 +180,7 @@ public class PictureEditHandler extends TextWebSocketHandler {
     /**
      * 广播给该图片的所有用户（支持排除掉某个 Session）
      */
-    private void broadcastToPicture(Long pictureId,
-                                    PictureEditResponseMessage pictureEditResponseMessage,
-                                    WebSocketSession excludeSession) throws IOException {
+    private void broadcastToPicture(Long pictureId, PictureEditResponseMessage pictureEditResponseMessage, WebSocketSession excludeSession) throws IOException {
         Set<WebSocketSession> sessionSet = pictureSessions.get(pictureId);
         if (CollUtil.isNotEmpty(sessionSet)) {
             // 创建 ObjectMapper
@@ -217,9 +208,7 @@ public class PictureEditHandler extends TextWebSocketHandler {
     /**
      * 广播给该图片的所有用户
      */
-    private void broadcastToPicture(Long pictureId,
-                                    PictureEditResponseMessage pictureEditResponseMessage) throws IOException {
+    private void broadcastToPicture(Long pictureId, PictureEditResponseMessage pictureEditResponseMessage) throws IOException {
         broadcastToPicture(pictureId, pictureEditResponseMessage, null);
     }
 }
-

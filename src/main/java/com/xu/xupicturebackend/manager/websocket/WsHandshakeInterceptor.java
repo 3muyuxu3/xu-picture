@@ -48,13 +48,6 @@ public class WsHandshakeInterceptor implements HandshakeInterceptor {
 
     /**
      * 建立连接前要先校验
-     *
-     * @param request
-     * @param response
-     * @param wsHandler
-     * @param attributes 给 WebSocketSession 会话设置属性
-     * @return
-     * @throws Exception
      */
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
